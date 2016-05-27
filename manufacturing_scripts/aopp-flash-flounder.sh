@@ -77,7 +77,9 @@ f_run() {
 
   # Kill server if one is already running
   if [[ -n "$(pgrep adb)" ]]; then
+    echo
     echo "Killing server"
+    echo
     killall adb &> /dev/null
   fi
 
@@ -93,14 +95,12 @@ f_run() {
 f_getserial() {
   # Count devices
   device_count="$(fastboot devices | wc -l)"
-
   # Store serials
-  j="0"
-  while read line
-  do
-    serial_array["${j}"]="${line}"
-    (( j++ ))
-  done < <(fastboot devices | cut -c 1-12)
+  serial_array=()
+
+  while read line; do
+    serial_array+=("${line:0:12}")
+  done < <(fastboot devices)
 
   # Print devices
   if [[ "${device_count}" -gt "1" ]]
