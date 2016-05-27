@@ -80,7 +80,7 @@ f_run() {
     echo
     echo "Killing server"
     echo
-    killall adb &> /dev/null
+    kill_server
   fi
 
   # Start server
@@ -111,6 +111,7 @@ f_getserial() {
     echo "There is 1 device connected: "
   else
     echo "There are no devices connected. Exiting now."
+    kill_server
     exit 1
   fi
   fastboot devices
@@ -258,6 +259,10 @@ f_flash() {
     (( k++ ))
   done
   wait
+}
+
+kill_server() {
+  killall adb &> /dev/null 
 }
 
 check_dependencies
